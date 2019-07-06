@@ -18,7 +18,13 @@ settings = sublime.load_settings("googletTranslate.sublime-settings")
 
 class GoogletTranslateCommand(sublime_plugin.TextCommand):
 
-    def run(self, edit, proxy_enable = settings.get("proxy_enable"), proxy_type = settings.get("proxy_type"), proxy_host = settings.get("proxy_host"), proxy_port = settings.get("proxy_port"), source_language = settings.get("source_language"), target_language = settings.get("target_language")):
+    def run(self, edit,
+            proxy_enable=settings.get("proxy_enable"),
+            proxy_type=settings.get("proxy_type"),
+            proxy_host=settings.get("proxy_host"),
+            proxy_port=settings.get("proxy_port"),
+            source_language=settings.get("source_language"),
+            target_language=settings.get("target_language")):
 
         if not source_language:
             source_language = settings.get("source_language")
@@ -55,7 +61,7 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
         _r_blank = re.compile("^\s*(#.*)?$")
 
         while keep_moving:
-
+            print('------------:', '------------')
             for region in v.sel():
 
                 whole_line = False
@@ -93,8 +99,9 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
                         return
                     else:
                         try:
-                            result = translate.translate(selection, target_type)
+                            result = translate.translate(selection, target_language, source_language, target_type)
                             time.sleep(0.15)
+
                         except:
                             # REF:
                             # https://github.com/Enteleform/-SCRIPTS-/blob/master/SublimeText/%5BMisc%5D/%5BProof%20Of%20Concept%5D%20Progress%20Bar/ProgressBarDemo/ProgressBarDemo.py
@@ -158,9 +165,9 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
 
                 # If the current line is the last line, or the contents of
                 # the current line does not match the regex, break out now.
-                if cur_line == last_line: #or largo == 0:  # not _r_blank.match(selection):
-                    print('cur_line(' + str(cur_line) + ') == last_line(' + str(last_line) + ')' )
-                    #print('selection.len(' + str(largo) + ')')
+                if cur_line == last_line: # or largo == 0:  # not _r_blank.match(selection):
+                    print('cur_line(' + str(cur_line) + ') == last_line(' + str(last_line) + ')')
+                    # print('selection.len(' + str(largo) + ')')
                     print('exiting here.')
                     keep_moving = False
 
@@ -178,7 +185,8 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
 
 class GoogletTranslateInfoCommand(sublime_plugin.TextCommand):
     def run(self, edit):
-        settings = sublime.load_settings("googletTranslate.sublime-settings")
+        global settings
+        # settings = sublime.load_settings("googletTranslate.sublime-settings")
         source_language = settings.get("source_language")
         target_language = settings.get("target_language")
         proxy_enable = settings.get("proxy_enable")
@@ -198,7 +206,8 @@ class GoogletTranslateInfoCommand(sublime_plugin.TextCommand):
 
 class GoogletTranslateToCommand(sublime_plugin.TextCommand):
     def run(self, edit):
-        settings = sublime.load_settings("googletTranslate.sublime-settings")
+        global settings
+        # settings = sublime.load_settings("googletTranslate.sublime-settings")
         source_language = settings.get("source_language")
         target_language = settings.get("target_language")
         proxy_enable = settings.get("proxy_enable")
