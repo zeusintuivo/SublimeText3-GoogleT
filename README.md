@@ -47,7 +47,7 @@ Set Target Language AND Source Language [default is auto detect] in user setting
         "source_language": "", // eg. en, default is 'auto detect'
         "target_language": "", // default is en
         "keep_moving_down": "yes",  // or yes or no Will keep translating down the line
-        "target_type": "html",  // or plain or html
+        "target_type": "html",  // or plain or html or yml
         "proxy_enable": "yes",  // enable or disable proxy
         "proxy_type": "socks5", // socks4 or socks5 or http
         "proxy_host": "127.0.0.1",  // eg. 127.0.0.1
@@ -75,6 +75,8 @@ Credits:
 =======
 
 * [PySocks](https://github.com/Anorov/PySocks)
+* [MTimer](https://github.com/MTimer/)
+* [MTimerCMS](https://github.com/MtimerCMS/)
 
 
 License:

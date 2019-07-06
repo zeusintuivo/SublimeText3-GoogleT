@@ -79,7 +79,7 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
                         print('')
                         sublime.status_message(u'ERR:' + str(cur_line + 1 ) + ' line too Long (' + selection + ')')
                         self.view.window().show_quick_panel(
-                            [ v,"Translate", "Error", message + " \n line(" + str(cur_line + 1) + ') length(' + str(largo) + ') selection(' + selection + ')'], "", 1, 2)
+                            ["Translate", "Error", message + " \n line(" + str(cur_line + 1) + ') length(' + str(largo) + ') selection(' + selection + ')'], "", 1, 2)
                         keep_moving = False
                         return
 
@@ -104,7 +104,7 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
                             print('')
                             sublime.status_message(u'' + message)
                             self.view.window().show_quick_panel(
-                                [v, "Translate", "Error", message], "", 1, 2)
+                                ["Translate", "Error", message], "", 1, 2)
                             keep_moving = False
                             return
                     # DEBUG print('edit')
@@ -141,7 +141,6 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
                 time.sleep(0.15)
                 sublime.status_message(u'moved down.')
                 print('moved down.')
-
 
                 # Get the current cursor position in the file
                 caret = v.sel()[0].begin()

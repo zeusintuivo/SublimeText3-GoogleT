@@ -34,7 +34,7 @@ class GoogletTranslate(object):
     error_codes = {
         401: "ERR_Target_Language_NOT_SPECIFIED",
         501: "ERR_VALUE_ERROR",
-        503: "ERR_SERVICE_NOT_AVAIBLE_TRY_AGAIN_OR_USE_RPOXY",
+        503: "ERR_SERVICE_NOT_AVAILABLE_TRY_AGAIN_OR_USE_PROXY",
     }
 
     def __init__(self, source_lang='en', target_lang='zh-CN'):

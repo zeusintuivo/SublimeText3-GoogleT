@@ -2,7 +2,7 @@
 # coding:utf-8
 # https://github.com/zeusintuivo/SublimeText3-GoogleT
 
-__version__ = "2.1.1"
+__version__ = "1.0.0"
 
 import sublime
 try:
@@ -40,7 +40,7 @@ class GoogletTranslate(object):
                         +r"\]")
 
     error_codes = {
-        501: "ERR_SERVICE_NOT_AVAIBLE_TRY_AGAIN_OR_USE_RPOXY",
+        501: "ERR_SERVICE_NOT_AVAILABLE_TRY_AGAIN_OR_USE_PROXY",
         503: "ERR_VALUE_ERROR",
         504: "ERR_PROXY_NOT_SPECIFIED",
     }
