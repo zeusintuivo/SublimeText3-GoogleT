@@ -1,0 +1,5 @@
+sublime-google-translate
+========================
+Googlet Translate plugin for SublimeText 3
+
+First version

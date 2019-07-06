@@ -1,0 +1,17 @@
+[
+	{"caption":"-"},
+    {
+    	"command": "googlet_translate",
+    	"id":"googlet-translate",
+    	"caption": "Googlet Translate selected text"
+    },
+	{
+		"command": "googlet_translate_to",
+		"id":"googlet-translate",
+		"caption":"Googlet Translate selected to..."
+	},
+  	{
+		"caption":"Googlet Translate Print the available translate variants",
+		"command": "googlet_translate_info"
+	}
+]
