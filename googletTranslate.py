@@ -64,8 +64,10 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
         keep_moving = True
 
         sublime.log_commands(False)
-        # sublime.active_window().run_command("show_panel", {"panel": "console", "toggle": True})
+        sublime.active_window().run_command("show_panel", {"panel": "console", "toggle": True})
+        sublime.active_window().run_command("reveal_in_side_bar", {"event": {"x": 505.296875, "y": 111.76171875}})
         v.run_command("show_panel", {"panel": "console", "toggle": True})
+        v.run_command("reveal_in_side_bar", {"event": {"x": 505.296875, "y": 111.76171875}})
 
         # REF:
         # https://stackoverflow.com/questions/44578315/making-a-sublime-text-3-macro-to-evaluate-a-line-and-then-move-the-cursor-to-the
@@ -183,6 +185,7 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
                     print('cur_line(' + str(cur_line) + ') == last_line(' + str(last_line) + ')')
                     # print('selection.len(' + str(largo) + ')')
                     v.run_command('save')
+                    sublime.active_window().run_command('save')
                     print('saving and exiting translation process here.')
                     keep_moving = False
 
