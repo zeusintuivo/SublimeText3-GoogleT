@@ -1,14 +1,14 @@
 [
   {
-    "caption":"GoogleT Translate selected text",
-    "command": "googlet_translate"
+    "caption":"Googlet Translate selected text",
+    "command": "google_t_translate"
   },
   {
-    "caption":"GoogleT Translate selected to...",
-    "command": "googlet_translate_to"
+    "caption":"Googlet Translate selected to...",
+    "command": "google_t_translate_to"
   },
   {
-    "caption":"GoogleT Translate Print the available translate variants",
-    "command": "googlet_translate_info"
+    "caption":"Googlet Translate Print the available translate variants",
+    "command": "google_t_translate_info"
   }
 ]

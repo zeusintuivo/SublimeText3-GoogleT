@@ -27,16 +27,16 @@ import socks
 import ssl
 
 
-class GoogleTTranslateException(Exception):
+class GoogletTranslateException(Exception):
     """
-    Default GoogleTTranslate exception
-    >>> GoogleTTranslateException("DoctestError")
-    GoogleTTranslateException('DoctestError',)
+    Default GoogletTranslate exception
+    >>> GoogletTranslateException("DoctestError")
+    GoogletTranslateException('DoctestError',)
     """
     pass
 
 
-class GoogleTTranslate(object):
+class GoogletTranslate(object):
     string_pattern = r"\"(([^\"\\]|\\.)*)\""
     match_string = re.compile(
         r"\,?\["
@@ -59,7 +59,7 @@ class GoogleTTranslate(object):
             'translate': 'https://translate.googleapis.com/translate_a/single?client=gtx&ie=UTF-8&oe=UTF-8&dt=t',
         }
         if not target_lang:
-            raise GoogleTTranslateException(self.error_codes[401])
+            raise GoogletTranslateException(self.error_codes[401])
         self.source = source_lang
         self.target = target_lang
 
@@ -86,9 +86,9 @@ class GoogleTTranslate(object):
                                                 '"th":"Thai","tr":"Turkish","uk":"Ukrainian","ur":"Urdu",'
                                                 '"vi":"Vietnamese","cy":"Welsh","yi":"Yiddish"}}')
         except IOError:
-            raise GoogleTTranslateException(self.error_codes[503])
+            raise GoogletTranslateException(self.error_codes[503])
         except ValueError:
-            raise GoogleTTranslateException(self.error_codes[501])
+            raise GoogletTranslateException(self.error_codes[501])
         return self.cache['languages']
 
     def translate(self, text, format='html'):
@@ -101,9 +101,9 @@ class GoogleTTranslate(object):
         try:
             json5 = self._get_json5_from_google(text).decode('utf-8')
         except IOError:
-            raise GoogleTTranslateException(self.error_codes[503])
+            raise GoogletTranslateException(self.error_codes[503])
         except ValueError:
-            raise GoogleTTranslateException(self.error_codes[501])
+            raise GoogletTranslateException(self.error_codes[501])
         return self._unescape(self._get_translation_from_json5(json5.encode('utf-8')))
 
     def _get_json5_from_google(self, text):
@@ -125,9 +125,9 @@ class GoogleTTranslate(object):
                 result = urlopen(result_url, timeout=5, headers=headers).read()
                 json = loads(result.decode('utf-8'))
             except IOError:
-                raise GoogleTTranslateException(self.error_codes[503])
+                raise GoogletTranslateException(self.error_codes[503])
             except ValueError:
-                raise GoogleTTranslateException(result)
+                raise GoogletTranslateException(result)
         return json
 
     def _get_translation_from_json5(self, content):
@@ -195,6 +195,6 @@ class SocksiPyHandler(HTTPHandler, HTTPSHandler):
 
 
 if __name__ == "__main__":
-    translate = GoogleTTranslate('en', 'fr')
+    translate = GoogletTranslate('en', 'fr')
     resulto = translate.translate('Hello, Beijing', 'html')
     print('resulto:' + resulto)

@@ -1,4 +1,4 @@
 [
-	{"keys": ["super+alt+g"], "command": "googlet_translate"},
-	{"keys": ["super+shift+alt+g"], "command": "googlet_translate_to"}
+	{"keys": ["super+alt+g"], "command": "google_t_translate"},
+	{"keys": ["super+shift+alt+g"], "command": "google_t_translate_to"}
 ]

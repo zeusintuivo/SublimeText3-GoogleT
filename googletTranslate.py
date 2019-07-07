@@ -1,13 +1,21 @@
 # -*- coding: utf-8 -*-
 # author:zeusintuivo
-# https://github.com/zeusintuivo/SublimeText3-GoogleT
+# https://github.com/zeusintuivo/SublimeText3-Googlet
 
 import sublime
 import sublime_plugin
+
+import inspect
+
+from sublime_plugin import application_command_classes
+from sublime_plugin import window_command_classes
+from sublime_plugin import text_command_classes
+
 import json
 import re
 import time
 from pprint import pprint
+
 if sublime.version() < '3':
     from core.translate import *
 else:
@@ -16,7 +24,7 @@ else:
 settings = sublime.load_settings("googletTranslate.sublime-settings")
 
 
-class GoogleTTranslateCommand(sublime_plugin.TextCommand):
+class GoogletTranslateCommand(sublime_plugin.TextCommand):
 
     def run(self, edit,
             proxy_enable=settings.get("proxy_enable"),
@@ -81,25 +89,26 @@ class GoogleTTranslateCommand(sublime_plugin.TextCommand):
 
                 if selection:
                     largo = len(selection)
-                    print('line(' + str(cur_line + 1) + ') length(' + str(largo) + ') selection(' + selection + ')' )
+                    print('line(' + str(cur_line + 1) + ') length(' + str(largo) + ') selection(' + selection + ')')
 
                     if largo > 256:
                         print('')
                         message = 'ERR:' + str(cur_line + 1) + ' line longer than 256 chars, consider split or short.'
                         print(message)
                         print('')
-                        sublime.status_message(u'ERR:' + str(cur_line + 1 ) + ' line too Long (' + selection + ')')
+                        sublime.status_message(u'ERR:' + str(cur_line + 1) + ' line too Long (' + selection + ')')
                         self.view.window().show_quick_panel(
-                            ["Translate", "Error", message + " \n line(" + str(cur_line + 1) + ') length(' + str(largo) + ') selection(' + selection + ')'], "", 1, 2)
+                            ["Translate", "Error", message + " \n line(" + str(cur_line + 1) + ') length(' + str(
+                                largo) + ') selection(' + selection + ')'], "", 1, 2)
                         keep_moving = False
                         return
 
                     selection = selection.encode('utf-8')
 
-                    translate = GoogleTTranslate(proxy_enable, proxy_type, proxy_host, proxy_port, s_lang, t_lang)
+                    translate = GoogletTranslate(proxy_enable, proxy_type, proxy_host, proxy_port, s_lang, t_lang)
 
                     if not t_lang:
-                        v.run_command("googlet_translate_to")
+                        v.run_command("google_t_translate_to")
                         keep_moving = False
                         return
                     else:
@@ -138,7 +147,7 @@ class GoogleTTranslateCommand(sublime_plugin.TextCommand):
                         detected = 'Auto'
                     else:
                         detected = s_lang
-                    sublime.status_message(u'Done! (translate ' + detected +' --> ' + t_lang + ')')
+                    sublime.status_message(u'Done! (translate ' + detected + ' --> ' + t_lang + ')')
                 else:
                     sublime.status_message(u'Nothing to translate!')
                     print('Nothing to translate!')
@@ -170,7 +179,7 @@ class GoogleTTranslateCommand(sublime_plugin.TextCommand):
 
                 # If the current line is the last line, or the contents of
                 # the current line does not match the regex, break out now.
-                if cur_line == last_line: # or largo == 0:  # not _r_blank.match(selection):
+                if cur_line == last_line:  # or largo == 0:  # not _r_blank.match(selection):
                     print('cur_line(' + str(cur_line) + ') == last_line(' + str(last_line) + ')')
                     # print('selection.len(' + str(largo) + ')')
                     v.run_command('save')
@@ -189,7 +198,7 @@ class GoogleTTranslateCommand(sublime_plugin.TextCommand):
         return self.view.rowcol(point)[0]
 
 
-class GoogleTTranslateInfoCommand(sublime_plugin.TextCommand):
+class GoogletTranslateInfoCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         global settings
         # settings = sublime.load_settings("googletTranslate.sublime-settings")
@@ -203,14 +212,14 @@ class GoogleTTranslateInfoCommand(sublime_plugin.TextCommand):
         v = self.view
         selection = v.substr(v.sel()[0])
 
-        translate = GoogleTTranslate(proxy_enable, proxy_type, proxy_host, proxy_port, source_language, target_language)
+        translate = GoogletTranslate(proxy_enable, proxy_type, proxy_host, proxy_port, source_language, target_language)
 
-        text = (json.dumps(translate.languages, ensure_ascii = False, indent = 2))
+        text = (json.dumps(translate.languages, ensure_ascii=False, indent=2))
 
         v.replace(edit, v.sel()[0], text)
 
 
-class GoogleTTranslateToCommand(sublime_plugin.TextCommand):
+class GoogletTranslateToCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         global settings
         # settings = sublime.load_settings("googletTranslate.sublime-settings")
@@ -224,20 +233,20 @@ class GoogleTTranslateToCommand(sublime_plugin.TextCommand):
         v = self.view
         selection = v.substr(v.sel()[0])
 
-        translate = GoogleTTranslate(proxy_enable, proxy_type, proxy_host, proxy_port, source_language, target_language)
+        translate = GoogletTranslate(proxy_enable, proxy_type, proxy_host, proxy_port, source_language, target_language)
 
-        text = (json.dumps(translate.languages['languages'], ensure_ascii = False))
+        text = (json.dumps(translate.languages['languages'], ensure_ascii=False))
         continents = json.loads(text)
         lkey = []
         ltrasl = []
 
         for (slug, title) in continents.items():
             lkey.append(slug)
-            ltrasl.append(title+' ['+slug+']')
+            ltrasl.append(title + ' [' + slug + ']')
 
         def on_done(index):
             if index >= 0:
-                self.view.run_command("googlet_translate", {"target_language": lkey[index]})
+                self.view.run_command("google_t_translate", {"target_language": lkey[index]})
 
         self.view.window().show_quick_panel(ltrasl, on_done)
 
@@ -246,6 +255,46 @@ class GoogleTTranslateToCommand(sublime_plugin.TextCommand):
             if not region.empty():
                 return True
         return False
+
+
+class GoogletTranslateShowCommand(sublime_plugin.WindowCommand):
+    def run(self):
+        self.view = self.window.new_file()
+        self.view.set_scratch(True)
+        self.view.set_name("Command List")
+
+        self.list_category("Application Commands", application_command_classes)
+        self.list_category("Window Commands", window_command_classes)
+        self.list_category("Text Commands", text_command_classes)
+
+    def append(self, line):
+        self.view.run_command("append", {"characters": line + "\n"})
+
+    def list_category(self, title, command_list):
+        self.append(title)
+        self.append(len(title) * "=")
+
+        for command in command_list:
+            self.append("{cmd} {args}".format(
+                cmd=self.get_name(command),
+                args=str(inspect.signature(command.run))))
+
+        self.append("")
+
+    def get_name(self, cls):
+        clsname = cls.__name__
+        name = clsname[0].lower()
+        last_upper = False
+        for c in clsname[1:]:
+            if c.isupper() and not last_upper:
+                name += '_'
+                name += c.lower()
+            else:
+                name += c
+            last_upper = c.isupper()
+        if name.endswith("_command"):
+            name = name[0:-8]
+        return name
 
 
 def plugin_loaded():

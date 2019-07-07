@@ -1,17 +1,22 @@
 [
 	{"caption":"-"},
     {
-    	"command": "googlet_translate",
+    	"command": "google_t_translate",
     	"id":"googlet-translate",
-    	"caption": "GoogleT Translate selected text"
+    	"caption": "Googlet Translate selected text"
     },
 	{
-		"command": "googlet_translate_to",
-		"id":"googlet-translate",
-		"caption":"GoogleT Translate selected to..."
+		"command": "google_t_translate_to",
+		"id":"googlet-translate-to",
+		"caption":"Googlet Translate selected to..."
 	},
   	{
-		"caption":"GoogleT Translate Print the available translate variants",
-		"command": "googlet_translate_info"
-	}
+		"caption":"Googlet Translate Print the available translate variants",
+		"command": "google_t_translate_info"
+	},
+	{
+		"caption":"Googlet Translate Print show all commands",
+		"command": "google_t_translate_show"
+	},
+
 ]

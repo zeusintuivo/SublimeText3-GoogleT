@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # coding:utf-8
-# https://github.com/zeusintuivo/SublimeText3-GoogleT
+# https://github.com/zeusintuivo/SublimeText3-Googlet
 
 from urllib.request import HTTPHandler, HTTPSHandler
 from http.client import HTTPConnection, HTTPSConnection
