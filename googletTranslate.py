@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # author:zeusintuivo
-# https://github.com/zeusintuivo/SublimeText3-Googlet
+# https://github.com/zeusintuivo/SublimeText3-GoogleT
 
 import sublime
 import sublime_plugin
@@ -21,10 +21,10 @@ if sublime.version() < '3':
 else:
     from .core.translate import *
 
-settings = sublime.load_settings("googletTranslate.sublime-settings")
+settings = sublime.load_settings("googleTTranslate.sublime-settings")
 
 
-class GoogletTranslateCommand(sublime_plugin.TextCommand):
+class GoogleTTranslateCommand(sublime_plugin.TextCommand):
 
     def run(self, edit,
             proxy_enable=settings.get("proxy_enable"),
@@ -105,7 +105,7 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
 
                     selection = selection.encode('utf-8')
 
-                    translate = GoogletTranslate(proxy_enable, proxy_type, proxy_host, proxy_port, s_lang, t_lang)
+                    translate = GoogleTTranslate(proxy_enable, proxy_type, proxy_host, proxy_port, s_lang, t_lang)
 
                     if not t_lang:
                         v.run_command("google_t_translate_to")
@@ -198,10 +198,10 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
         return self.view.rowcol(point)[0]
 
 
-class GoogletTranslateInfoCommand(sublime_plugin.TextCommand):
+class GoogleTTranslateInfoCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         global settings
-        # settings = sublime.load_settings("googletTranslate.sublime-settings")
+        # settings = sublime.load_settings("googleTTranslate.sublime-settings")
         source_language = settings.get("source_language")
         target_language = settings.get("target_language")
         proxy_enable = settings.get("proxy_enable")
@@ -212,17 +212,17 @@ class GoogletTranslateInfoCommand(sublime_plugin.TextCommand):
         v = self.view
         selection = v.substr(v.sel()[0])
 
-        translate = GoogletTranslate(proxy_enable, proxy_type, proxy_host, proxy_port, source_language, target_language)
+        translate = GoogleTTranslate(proxy_enable, proxy_type, proxy_host, proxy_port, source_language, target_language)
 
         text = (json.dumps(translate.languages, ensure_ascii=False, indent=2))
 
         v.replace(edit, v.sel()[0], text)
 
 
-class GoogletTranslateToCommand(sublime_plugin.TextCommand):
+class GoogleTTranslateToCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         global settings
-        # settings = sublime.load_settings("googletTranslate.sublime-settings")
+        # settings = sublime.load_settings("googleTTranslate.sublime-settings")
         source_language = settings.get("source_language")
         target_language = settings.get("target_language")
         proxy_enable = settings.get("proxy_enable")
@@ -233,7 +233,7 @@ class GoogletTranslateToCommand(sublime_plugin.TextCommand):
         v = self.view
         selection = v.substr(v.sel()[0])
 
-        translate = GoogletTranslate(proxy_enable, proxy_type, proxy_host, proxy_port, source_language, target_language)
+        translate = GoogleTTranslate(proxy_enable, proxy_type, proxy_host, proxy_port, source_language, target_language)
 
         text = (json.dumps(translate.languages['languages'], ensure_ascii=False))
         continents = json.loads(text)
@@ -257,7 +257,7 @@ class GoogletTranslateToCommand(sublime_plugin.TextCommand):
         return False
 
 
-class GoogletTranslateShowCommand(sublime_plugin.WindowCommand):
+class GoogleTTranslateShowCommand(sublime_plugin.WindowCommand):
     def run(self):
         self.view = self.window.new_file()
         self.view.set_scratch(True)
@@ -299,4 +299,4 @@ class GoogletTranslateShowCommand(sublime_plugin.WindowCommand):
 
 def plugin_loaded():
     global settings
-    settings = sublime.load_settings("googletTranslate.sublime-settings")
+    settings = sublime.load_settings("googleTTranslate.sublime-settings")

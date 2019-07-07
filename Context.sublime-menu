@@ -2,20 +2,20 @@
 	{"caption":"-"},
     {
     	"command": "google_t_translate",
-    	"id":"googlet-translate",
-    	"caption": "Googlet Translate selected text"
+    	"id":"google-t-translate",
+    	"caption": "GoogleT Translate selected text"
     },
 	{
 		"command": "google_t_translate_to",
-		"id":"googlet-translate-to",
-		"caption":"Googlet Translate selected to..."
+		"id":"google-t-translate-to",
+		"caption":"GoogleT Translate selected to..."
 	},
   	{
-		"caption":"Googlet Translate Print the available translate variants",
+		"caption":"GoogleT Translate Print the available translate variants",
 		"command": "google_t_translate_info"
 	},
 	{
-		"caption":"Googlet Translate Print show all commands",
+		"caption":"GoogleT Translate Print show all commands",
 		"command": "google_t_translate_show"
 	},
 

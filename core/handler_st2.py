@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # coding:utf-8
-# https://github.com/zeusintuivo/SublimeText3-Googlet
+# https://github.com/zeusintuivo/SublimeText3-GoogleT
 
 import urllib2
 import httplib

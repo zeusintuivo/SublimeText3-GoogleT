@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # coding:utf-8
-# https://github.com/zeusintuivo/SublimeText3-Googlet
+# https://github.com/zeusintuivo/SublimeText3-GoogleT
 
 __version__ = "1.0.0"
 
@@ -27,16 +27,16 @@ else:
     from .socks_st3 import *
 
 
-class GoogletTranslateException(Exception):
+class GoogleTTranslateException(Exception):
     """
-    Default GoogletTranslate exception
-    >>> GoogletTranslateException("DoctestError")
-    GoogletTranslateException('DoctestError',)
+    Default GoogleTTranslate exception
+    >>> GoogleTTranslateException("DoctestError")
+    GoogleTTranslateException('DoctestError',)
     """
     pass
 
 
-class GoogletTranslate(object):
+class GoogleTTranslate(object):
     string_pattern = r"\"(([^\"\\]|\\.)*)\""
     match_string = re.compile(
         r"\,?\["
@@ -62,10 +62,10 @@ class GoogletTranslate(object):
             source_lang = 'auto'
         if not target_lang:
             target_lang = 'en'
-            raise GoogletTranslateException(self.error_codes[401])
+            raise GoogleTTranslateException(self.error_codes[401])
         if proxy_enable == 'yes':
             if not proxy_type or not proxy_host or not proxy_port:
-                raise GoogletTranslateException(self.error_codes[504])
+                raise GoogleTTranslateException(self.error_codes[504])
         self.source = source_lang
         self.target = target_lang
         self.proxyok = proxy_enable
@@ -96,9 +96,9 @@ class GoogletTranslate(object):
                                                 '"th":"Thai","tr":"Turkish","uk":"Ukrainian","ur":"Urdu",'
                                                 '"vi":"Vietnamese","cy":"Welsh","yi":"Yiddish"}}')
         except IOError:
-            raise GoogletTranslateException(self.error_codes[501])
+            raise GoogleTTranslateException(self.error_codes[501])
         except ValueError:
-            raise GoogletTranslateException(self.error_codes[503])
+            raise GoogleTTranslateException(self.error_codes[503])
         return self.cache['languages']
 
     def translate(self, text, target_language, source_language, formato='html'):
@@ -182,9 +182,9 @@ class GoogletTranslate(object):
         try:
             json5 = self._get_json5_from_google(text).decode('utf-8')
         except IOError:
-            raise GoogletTranslateException(self.error_codes[501])
+            raise GoogleTTranslateException(self.error_codes[501])
         except ValueError:
-            raise GoogletTranslateException(self.error_codes[503])
+            raise GoogleTTranslateException(self.error_codes[503])
         return self._get_translation_from_json5(json5.encode('utf-8'))
 
     def _get_json5_from_google(self, text):
@@ -214,9 +214,9 @@ class GoogletTranslate(object):
                 result = urlopen(req, timeout=2).read()
                 json = result
             except IOError:
-                raise GoogletTranslateException(self.error_codes[501])
+                raise GoogleTTranslateException(self.error_codes[501])
             except ValueError:
-                raise GoogletTranslateException(result)
+                raise GoogleTTranslateException(result)
         return json
 
     @staticmethod
