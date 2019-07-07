@@ -1,4 +1,4 @@
-Sublime Text Googlet Translate Plugin
+Sublime Text GoogleT Translate Plugin
 ===============================
 
 
@@ -31,14 +31,14 @@ Usage:
 
 Select text:
 
-* press `ctrl+alt+g` or select `Googlet Translate seclected text` in context menu
+* press `ctrl+alt+g` or select `GoogleT Translate seclected text` in context menu
 
 Tips:
 ====
 
 Overview your language code:
 
-* press `Googlet Translate Print the available translate variants` in context menu
+* press `GoogleT Translate Print the available translate variants` in context menu
 * press `ctrl + ~` to see output errors in console
 
 Author:

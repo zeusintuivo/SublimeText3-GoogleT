@@ -1,4 +1,4 @@
-Sublime Text Googlet Translate Plugin
+Sublime Text GoogleT Translate Plugin
 ===============================
 
 For SublimeText 3, support proxy `PROXY_TYPE_SOCKS5` `PROXY_TYPE_SOCKS4` `PROXY_TYPE_HTTP`
@@ -60,14 +60,14 @@ Usage:
 
 Select text:
 
-* press `ctrl+alt+g` or select `Googlet Translate selected text` in context menu
+* press `ctrl+alt+g` or select `GoogleT Translate selected text` in context menu
 
 Tips:
 ====
 
 Overview your language code:
 
-* press `Googlet Translate Print the available translate variants` in context menu
+* press `GoogleT Translate Print the available translate variants` in context menu
 * press `ctrl + ~` to see output errors in console
 
 
