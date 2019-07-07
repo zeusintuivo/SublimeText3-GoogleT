@@ -23,13 +23,13 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
             proxy_type=settings.get("proxy_type"),
             proxy_host=settings.get("proxy_host"),
             proxy_port=settings.get("proxy_port"),
-            source_language=settings.get("source_language"),
-            target_language=settings.get("target_language")):
+            s_lang=settings.get("source_language"),
+            t_lang=settings.get("target_language")):
 
-        if not source_language:
-            source_language = settings.get("source_language")
-        if not target_language:
-            target_language = settings.get("target_language")
+        if not s_lang:
+            s_lang = settings.get("source_language")
+        if not t_lang:
+            t_lang = settings.get("target_language")
         if not proxy_enable:
             proxy_enable = settings.get("proxy_enable")
         if not proxy_type:
@@ -91,22 +91,22 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
 
                     selection = selection.encode('utf-8')
 
-                    translate = GoogletTranslate(proxy_enable, proxy_type, proxy_host, proxy_port, source_language, target_language)
+                    translate = GoogletTranslate(proxy_enable, proxy_type, proxy_host, proxy_port, s_lang, t_lang)
 
-                    if not target_language:
+                    if not t_lang:
                         v.run_command("googlet_translate_to")
                         keep_moving = False
                         return
                     else:
                         try:
-                            result = translate.translate(selection, target_language, source_language, target_type)
-                            time.sleep(0.15)
+                            result = translate.translate(selection, t_lang, s_lang, target_type)
+                            time.sleep(1.15)
 
                         except:
                             # REF:
                             # https://github.com/Enteleform/-SCRIPTS-/blob/master/SublimeText/%5BMisc%5D/%5BProof%20Of%20Concept%5D%20Progress%20Bar/ProgressBarDemo/ProgressBarDemo.py
                             print('')
-                            message = 'ERR:' + str(cur_line + 1) + ' translation service failed.'
+                            message = 'ERR: LINE:' + str(cur_line + 1) + ' translation service failed.'
                             print(message)
                             print('')
                             sublime.status_message(u'' + message)
@@ -129,11 +129,11 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
                         v.replace(edit, coordinates, result)
 
                     window.focus_view(v)
-                    if not source_language:
+                    if not s_lang:
                         detected = 'Auto'
                     else:
-                        detected = source_language
-                    sublime.status_message(u'Done! (translate '+detected+' --> '+target_language+')')
+                        detected = s_lang
+                    sublime.status_message(u'Done! (translate ' + detected +' --> ' + t_lang + ')')
                 else:
                     sublime.status_message(u'Nothing to translate!')
                     print('Nothing to translate!')

@@ -103,14 +103,80 @@ class GoogletTranslate(object):
 
     def translate(self, text, target_language, source_language, formato='html'):
         original = unquote(quote(text, ''))
-        data = self._get_translation_from_google(text)
         if formato == 'plain':
+            data = self._get_translation_from_google(text)
             data = self.filter_tags(data)
         elif formato == 'yml':
-            data = self.fix_yml(original, data, target_language, source_language)
+            if len(original) > 250:
+                print('1')
+                data = self.fix_too_text(original)
+            else:
+                print('2')
+                if '%{' in original:
+                    print('3')
+                    data = self.fix_variable_keep(original)
+                else:
+                    data = self._get_translation_from_google(original)
+                data = self.fix_yml(original, data, target_language, source_language)
         else:
+            data = self._get_translation_from_google(text)
             data = self.fix_google(data)
         return data
+
+    def fix_too_text(self, original):
+        if len(original) > 250:
+            long_data = ""
+            sentence_data = ""
+            split_sentences = original.split('.')
+            for sentence in split_sentences:
+                if '%{' in sentence:
+                    sentence_data = sentence_data + self.fix_variable_keep(sentence)
+                else:
+                    sentence_data = self._get_translation_from_google(sentence)
+        return sentence_data
+
+    def fix_variable_keep(self, sentence):
+        sentence_data = ""
+        split_percent = sentence.split('%{')
+        splitted_trans = ""
+        count_split = 0
+        for splitted in split_percent:
+            if splitted in (None, ''):
+                # case 1 "%{time_ago} Dernière connexion sur le compte : il y a %{%{time_ago}%{time_ago}.".split('%{')
+                # ['', 'time_ago} Dernière connexion sur le compte : il y a ', '', 'time_ago}', 'time_ago}.']
+                # splitted = split_percent[0]  -- '' = splitted_trans = '%{'
+                # splitted = split_percent[1]  -- 'time_ago} Dernière connexion sur le compte : il y a '
+                # splitted = split_percent[2]  -- ''
+                # splitted = split_percent[3]  -- 'time_ago}'
+                # splitted = split_percent[4]  -- 'time_ago}'
+                # -
+                # case 2 "%{details_link}"
+                # ['', 'details_link}']
+                splitted_trans = splitted_trans + ' %{'
+            else:
+                if '}' in splitted:
+                    # 'time_ago} Dernière connexion sur le compte : il y a '
+                    cut_other_part = splitted.split('}')
+                    # ['time_ago', ' Dernière connexion sur le compte : il y a ']
+                    second_part_split = cut_other_part[1]
+                    #              ' Dernière connexion sur le compte : il y a '
+                    if second_part_split in (None, ''):
+                        splited_data = ''
+                    else:
+                        splited_data = self._get_translation_from_google(second_part_split)
+                    if count_split == 0:
+                        splitted_trans = splitted_trans + cut_other_part[0] + '}' + splited_data
+                    else:
+                        splitted_trans = splitted_trans + ' %{' + cut_other_part[0] + '}' + splited_data
+                else:
+                    splited_data = self._get_translation_from_google(splitted)
+                    splitted_trans = splitted_trans + splited_data
+                count_split = count_split + 1
+        if count_split == 0:
+            sentence_data = sentence_data + ' %{' + splitted_trans
+        else:
+            sentence_data = splitted_trans
+        return sentence_data
 
     def _get_translation_from_google(self, text):
         try:
@@ -215,6 +281,14 @@ class GoogletTranslate(object):
 
     @staticmethod
     def fix_yml(original, html_string, target_language, source_language):
+        original_no_spaces = original.lstrip()
+        original_key_is = original_no_spaces.split(':')
+        key_has_spaces = original_key_is[0].split(' ')
+        original_len = len(original)
+        original_no_spaces_len = len(original_no_spaces)
+        original_missing_spaces_len = original_len - original_no_spaces_len
+        original_missing_spaces = ' ' * original_missing_spaces_len
+
         s = re.compile(r'<[ ]{0,1}/ (?P<name>[a-zA-Z ]{1,})>')
         sz = s.search(html_string)
         while sz:
@@ -226,8 +300,10 @@ class GoogletTranslate(object):
                 sz = s.search(html_string)
             except KeyError:
                 sz = s.search(html_string)
-        if ':' in original and ':' in html_string:
-            # print('original:' + original + ')')
+        # this is a key     in yml --> last_connection_html:
+        # this is not a key in yml --> Dernière connexion sur le compte :
+        if ':' in original and ':' in html_string and len(original_key_is) >= 2 and len(key_has_spaces) == 1:
+            print('yml key protection:' + original + ')')
             first_source_colon = original.find(':')
             keep_source_definition = original[:first_source_colon]
             # print('length(' + str(12) + ') def(' + keep_source_definition + ')')
@@ -236,13 +312,26 @@ class GoogletTranslate(object):
             # print('length(' + str(32) + ') trans(' + keep_translated_text + ')')
             html_string = keep_source_definition + keep_translated_text
             # new_largo = len(html_string)
-        # print('original(' + original + ')')
+        print('original(' + original + ')')
         # print('source_language(' + source_language + ')')
         # print('target_language(' + target_language + ')')
         if '{' in original and '{' in html_string and '%' in original and '%' in html_string:
             html_string = html_string.replace('% {', ' %{')
+        if ': >' in original and ':>' in html_string:
+            html_string = html_string.replace(':>', ': >')
         if original == source_language + ':':
             html_string = target_language + ':'
+        # restore white spaces
+        html_string_no_spaces = html_string.lstrip()
+        html_string_len = len(html_string)
+        html_string_no_spaces_len = len(html_string_no_spaces)
+        html_string_missing_spaces_len = html_string_len - html_string_no_spaces_len
+        # html_string_missing_spaces = ' ' * html_string_missing_spaces_len
+        print('original_missing_spaces_len(' + str(original_missing_spaces_len) + ')')
+        print('html_string_missing_spaces_len(' + str(html_string_missing_spaces_len) + ')')
+        if original_missing_spaces_len > html_string_missing_spaces_len:
+            html_string = original_missing_spaces + html_string
+        print('html_string(' + html_string + ')')
         return html_string
 
     @staticmethod
