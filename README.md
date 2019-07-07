@@ -11,17 +11,17 @@ Install:
 =======
 
 **[Recommend] Package Control:** [Usage](https://sublime.wbond.net/docs/usage),
- `Package Control: Install Package` then search `SublimeText3-Googlet`
+ `Package Control: Install Package` then search `SublimeText3-GoogleT`
 
 **Without Git:** Download the latest source from 
-[GitHub](https://github.com/zeusintuivo/SublimeText3-Googlet) and copy the 
-SublimeText3-Googlet folder to your Sublime Text "Packages" directory.
+[GitHub](https://github.com/zeusintuivo/SublimeText3-GoogleT) and copy the 
+SublimeText3-GoogleT folder to your Sublime Text "Packages" directory.
 
 **With Git:** Clone the repository in your Sublime Text "Packages" directory:
 
-    git clone https://github.com/zeusintuivo/SublimeText3-Googlet 'SublimeText3-Googlet'
+    git clone https://github.com/zeusintuivo/SublimeText3-GoogleT 'SublimeText3-GoogleT'
 
-Folder name must be **SublimeText3-Googlet** !!
+Folder name must be **SublimeText3-GoogleT** !!
 
 The "Packages" directory is located at:
 

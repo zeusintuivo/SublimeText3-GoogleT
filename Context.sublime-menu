@@ -1,22 +1,22 @@
 [
 	{"caption":"-"},
     {
-    	"command": "google_t_translate",
+    	"command": "googlet_translate",
     	"id":"googlet-translate",
     	"caption": "Googlet Translate selected text"
     },
 	{
-		"command": "google_t_translate_to",
+		"command": "googlet_translate_to",
 		"id":"googlet-translate-to",
 		"caption":"Googlet Translate selected to..."
 	},
   	{
 		"caption":"Googlet Translate Print the available translate variants",
-		"command": "google_t_translate_info"
+		"command": "googlet_translate_info"
 	},
 	{
 		"caption":"Googlet Translate Print show all commands",
-		"command": "google_t_translate_show"
+		"command": "googlet_translate_show"
 	},
 
 ]

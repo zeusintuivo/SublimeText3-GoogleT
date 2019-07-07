@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # author:zeusintuivo
-# https://github.com/zeusintuivo/SublimeText3-Googlet
+# https://github.com/zeusintuivo/SublimeText3-GoogleT
 
 import sublime
 import sublime_plugin
@@ -108,13 +108,13 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
                     translate = GoogletTranslate(proxy_enable, proxy_type, proxy_host, proxy_port, s_lang, t_lang)
 
                     if not t_lang:
-                        v.run_command("google_t_translate_to")
+                        v.run_command("googlet_translate_to")
                         keep_moving = False
                         return
                     else:
                         try:
                             result = translate.translate(selection, t_lang, s_lang, target_type)
-                            time.sleep(1.15)
+                            time.sleep(3.15)
 
                         except:
                             # REF:
@@ -246,7 +246,7 @@ class GoogletTranslateToCommand(sublime_plugin.TextCommand):
 
         def on_done(index):
             if index >= 0:
-                self.view.run_command("google_t_translate", {"target_language": lkey[index]})
+                self.view.run_command("googlet_translate", {"target_language": lkey[index]})
 
         self.view.window().show_quick_panel(ltrasl, on_done)
 

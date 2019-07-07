@@ -1,6 +1,6 @@
 [
-	{"keys": ["alt+option+g"], "command": "google_t_translate"},
-	{"keys": ["alt+super+g"], "command": "google_t_translate"},
-	{"keys": ["shift+alt+option+g"], "command": "google_t_translate_to"},
-	{"keys": ["shift+alt+super+g"], "command": "google_t_translate_to"}
+	{"keys": ["alt+option+g"], "command": "googlet_translate"},
+	{"keys": ["alt+super+g"], "command": "googlet_translate"},
+	{"keys": ["shift+alt+option+g"], "command": "googlet_translate_to"},
+	{"keys": ["shift+alt+super+g"], "command": "googlet_translate_to"}
 ]
