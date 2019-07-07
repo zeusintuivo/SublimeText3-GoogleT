@@ -54,6 +54,11 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
         last_line = self.line_at(v.size())
 
         keep_moving = True
+
+        sublime.log_commands(False)
+        # sublime.active_window().run_command("show_panel", {"panel": "console", "toggle": True})
+        v.run_command("show_panel", {"panel": "console", "toggle": True})
+
         # REF:
         # https://stackoverflow.com/questions/44578315/making-a-sublime-text-3-macro-to-evaluate-a-line-and-then-move-the-cursor-to-the
         # A regex that matches a line that's blank or contains a comment.
@@ -168,7 +173,8 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
                 if cur_line == last_line: # or largo == 0:  # not _r_blank.match(selection):
                     print('cur_line(' + str(cur_line) + ') == last_line(' + str(last_line) + ')')
                     # print('selection.len(' + str(largo) + ')')
-                    print('exiting here.')
+                    v.run_command('save')
+                    print('saving and exiting translation process here.')
                     keep_moving = False
 
     def is_visible(self):

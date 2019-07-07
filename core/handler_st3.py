@@ -7,6 +7,7 @@ from http.client import HTTPConnection, HTTPSConnection
 import ssl
 from .socks_st3 import *
 
+
 class SocksiPyConnection(HTTPConnection):
     def __init__(self, proxytype, proxyaddr, proxyport=None, rdns=True, username=None, password=None, *args, **kwargs):
         self.proxyargs = (proxytype, proxyaddr, proxyport, rdns, username, password)
@@ -18,6 +19,7 @@ class SocksiPyConnection(HTTPConnection):
         if type(self.timeout) in (int, float):
             self.sock.settimeout(self.timeout)
         self.sock.connect((self.host, self.port))
+
 
 class SocksiPyConnectionS(HTTPSConnection):
     def __init__(self, proxytype, proxyaddr, proxyport=None, rdns=True, username=None, password=None, *args, **kwargs):
@@ -31,6 +33,7 @@ class SocksiPyConnectionS(HTTPSConnection):
             sock.settimeout(self.timeout)
         sock.connect((self.host, self.port))
         self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file)
+
 
 class SocksiPyHandler(HTTPHandler, HTTPSHandler):
     def __init__(self, *args, **kwargs):
