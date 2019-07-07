@@ -114,7 +114,7 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
                     else:
                         try:
                             result = translate.translate(selection, t_lang, s_lang, target_type)
-                            time.sleep(3.15)
+                            time.sleep(0.15)
 
                         except:
                             # REF:
