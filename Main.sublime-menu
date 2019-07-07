@@ -13,7 +13,8 @@
                     { "command": "googlet_translate", "caption": "Googlet Translate selected text" },
                     { "command": "googlet_translate_to", "caption": "Googlet Translate selected to..." },
                     { "caption": "-" },
-                    { "command": "googlet_translate_info", "caption": "Print the available translate variants" }
+                    { "command": "googlet_translate_info", "caption": "Print the available translate variants" },
+                    { "command": "googlet_translate_show", "caption": "Print show all commands" }
                 ]
             }
         ]

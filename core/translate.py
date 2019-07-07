@@ -165,9 +165,9 @@ class GoogletTranslate(object):
                     else:
                         splited_data = self._get_translation_from_google(second_part_split)
                     if count_split == 0:
-                        splitted_trans = splitted_trans + cut_other_part[0] + '}' + splited_data
+                        splitted_trans = splitted_trans + cut_other_part[0] + '} ' + splited_data
                     else:
-                        splitted_trans = splitted_trans + ' %{' + cut_other_part[0] + '}' + splited_data
+                        splitted_trans = splitted_trans + ' %{' + cut_other_part[0] + '} ' + splited_data
                 else:
                     splited_data = self._get_translation_from_google(splitted)
                     splitted_trans = splitted_trans + splited_data
