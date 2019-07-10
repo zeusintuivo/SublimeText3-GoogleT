@@ -76,7 +76,7 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
         _r_blank = re.compile("^\s*(#.*)?$")
 
         while keep_moving:
-            print('------------:', '------------')
+            print('-------SublimeText3-GoogleT-----:', '------------')
             for region in v.sel():
 
                 whole_line = False

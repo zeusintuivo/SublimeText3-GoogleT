@@ -141,8 +141,8 @@ class GoogletTranslate(object):
         print(10)
         original_no_spaces = original.lstrip()
         original_no_spaces_all = original_no_spaces.rstrip()
-        if original_no_spaces_all in (None, '', '<br/>', '</i>', '<strong>', '</strong>',
-                                      '<i>', '<br>', '</br>'):  # skip empty br's
+        if original_no_spaces_all in (None, '', '<br/>', '</i>', '<strong>', '</strong>', '<i>', '<br>', '</br>'):
+            # skip empty br's
             return True
         print(11)
         original_key_is = original_no_spaces.split(':')
@@ -153,8 +153,8 @@ class GoogletTranslate(object):
         if len(original_key_is) > 1:
             second_part_exists = original_key_is[1].lstrip().rstrip()
         if ':' in original and ':' in original and len(original_key_is) >= 2 and len(key_has_spaces) == 1:
-            print('row has a yml key:(' + original + ')')
             if second_part_exists in (None, '', '>', '|'):
+                print('row has a yml key:(' + original + ')')
                 # empty second meaning, then is a like == key: or key:>  or key: |
                 return True
         return False
@@ -263,7 +263,7 @@ class GoogletTranslate(object):
             sentence_data = splitted_trans
         return sentence_data
 
-    def _get_translation_from_deepl(self, text):
+    def _get_translation_from_google(self, text):
         try:
             json5 = self._get_json5_from_google(text).decode('utf-8')
         except IOError:
