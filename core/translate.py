@@ -17,6 +17,7 @@ except ImportError:
 from json import loads
 import re
 import json
+import random
 
 if sublime.version() < '3':
     from urllib2 import urlopen, build_opener, Request
@@ -209,6 +210,7 @@ class GoogletTranslate(object):
                     else:
                         splitted_trans = splitted_trans + ' %{' + cut_other_part[0] + '} ' + splited_data
                 else:
+                    print('go 1')
                     splited_data = self._get_translation_from_google(splitted)
                     splitted_trans = splitted_trans + splited_data
                 count_split = count_split + 1
@@ -274,8 +276,12 @@ class GoogletTranslate(object):
 
     def _get_json5_from_google(self, text):
         escaped_source = quote(text, '')
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0'}
-
+        headerses = ['Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0',
+                     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:67.0) Gecko/20100101 Firefox/67.0',
+                     'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/67.0',
+                     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) '
+                     'Chrome/75.0.3770.100 Safari/537.36']
+        headers = {'User-Agent': headerses[random.randrange(len(headerses))]}
         if self.proxyok == 'yes':
             if self.proxytp == 'socks5':
                 opener = build_opener(SocksiPyHandler(PROXY_TYPE_SOCKS5, self.proxyho, int(self.proxypo)))
@@ -292,10 +298,12 @@ class GoogletTranslate(object):
             json = result
 
         else:
+
             try:
-                req = Request(
-                    self.api_urls['translate'] + "&sl=%s&tl=%s&text=%s" % (self.source, self.target, escaped_source),
-                    headers=headers)
+                request_url = self.api_urls['translate'] + "&sl=%s&tl=%s&text=%s" % (
+                self.source, self.target, escaped_source)
+                print('request_url 2:' + request_url)
+                req = Request(request_url, headers=headers)
                 result = urlopen(req, timeout=2).read()
                 json = result
             except IOError:
@@ -387,7 +395,8 @@ class GoogletTranslate(object):
                 sz = s.search(html_string)
         # this is a key     in yml --> last_connection_html:
         # this is not a key in yml --> Dernière connexion sur le compte :
-        if ':' in original and ':' in html_string and len(original_key_is) >= 2 and len(key_has_spaces) == 1:  # fix keep keys names
+        if ':' in original and ':' in html_string and len(original_key_is) >= 2 and len(
+                key_has_spaces) == 1:  # fix keep keys names
             print('yml key protection:' + original + ')')
             first_source_colon = original.find(':')
             keep_source_definition = original[:first_source_colon]
@@ -402,6 +411,8 @@ class GoogletTranslate(object):
         # print('target_language(' + target_language + ')')
         if '{' in original and '{' in html_string and '%' in original and '%' in html_string:   # fix  % { to  %{
             html_string = html_string.replace('% {', ' %{')
+        if '},' in original and '} ,' in html_string:  # fix  } , to  },
+            html_string = html_string.replace('} ,', '},')
         if ': >' in original and ':>' in html_string:      # fix :> to : >
             html_string = html_string.replace(':>', ': >')
 
