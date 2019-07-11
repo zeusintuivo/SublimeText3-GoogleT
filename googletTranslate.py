@@ -75,6 +75,7 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
         # Adjust as needed
         _r_blank = re.compile("^\s*(#.*)?$")
 
+        looping = 0
         while keep_moving:
             print('-------SublimeText3-GoogleT-----:', '------------')
             for region in v.sel():
@@ -117,6 +118,13 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
                         try:
                             result = translate.translate(selection, t_lang, s_lang, target_type)
                             time.sleep(0.15)
+                            looping = looping + 1
+                            if looping > 51:
+                                print('exiting 51 process here. ... last line processed(' + str(cur_line + 1))
+                                v.run_command('save')
+                                sublime.active_window().run_command('save')
+                                keep_moving = False
+                                raise DeeplTranslateException(translate.error_codes[401])
 
                         except:
                             # REF:
@@ -156,6 +164,13 @@ class GoogletTranslateCommand(sublime_plugin.TextCommand):
                     # DEBUG print('selection(' + selection + ')' )
 
             if effectuate_keep_moving == 'no':
+                keep_moving = False
+
+            looping = looping + 1
+            if looping > 50:
+                print('exiting 50 process here.... last line processed(' + str(cur_line + 1))
+                v.run_command('save')
+                sublime.active_window().run_command('save')
                 keep_moving = False
 
             if keep_moving:
