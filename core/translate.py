@@ -105,9 +105,9 @@ class GoogletTranslate(object):
     def translate(self, text, target_language, source_language, formato='html'):
         original = unquote(quote(text, ''))
         print('original:', original)
-        if "'" in original:
-            original = original.replace("'", '"')
-        print('original quo:', original)
+        # if "'" in original:
+        #    original = original.replace("'", '"')
+        print('orig quo:', original)
         if formato == 'plain':
             data = self._get_translation_from_google(original)
             data = self.filter_tags(data)
@@ -126,31 +126,63 @@ class GoogletTranslate(object):
                     if self.starts_with_key(original):
                         saved_key = self.obtain_key(original)
                         translate_this = self.obtain_second_part(original)
-                        if '<' in translate_this:
-                            print('a3')
+                        if "\\n" in translate_this:
+                            print('a3c')
+                            data = saved_key + ': ' + self.fix_enters_keep(translate_this, "\\n")
+                        elif "\n" in translate_this:
+                            print('a3c')
+                            data = saved_key + ': ' + self.fix_enters_keep(translate_this, "\n")
+                        elif "'" in translate_this:
+                            print('a3a')
+                            data = saved_key + ': ' + self.fix_singlequote_keep(translate_this)
+                        elif '"' in translate_this:
+                            print('a3b')
+                            data = saved_key + ': ' + self.fix_doublequote_keep(translate_this)
+                        elif '<' in translate_this:
+                            print('a3d')
                             data = saved_key + ': ' + self.fix_html_keep(translate_this)
                         elif '%{' in original:
                             print('a4')
                             data = saved_key + ': ' + self.fix_variable_keep(translate_this)
+                        elif '#{' in original:
+                            print('a4b')
+                            data = saved_key + ': ' + self.fix_hashruby_keep(translate_this)
                         else:
                             print('a5')
                             data = saved_key + ': ' + self._get_translation_from_google(translate_this)
                     else:
-                        if '<' in original:
-                            print('b3')
-                            data = self.fix_html_keep(original)
-                        elif '%{' in original:
-                            print('b4')
-                            data = self.fix_variable_keep(original)
-                        else:
-                            print('b5')
-                            data = self._get_translation_from_google(original)
-
+                        data = self.original_work_distribute(original)
                     data = self.fix_yml(original, data, target_language, source_language)
         else:
             data = self._get_translation_from_google(text)
             data = self.fix_google(data)
         return data
+
+    def original_work_distribute(self, original):
+        if "\\n" in original:
+            print('c3c', original)
+            return self.fix_enters_keep(original, "\\n")
+        elif "\n" in original:
+            print('c3c', original)
+            return self.fix_enters_keep(original, "\n")
+        elif "'" in original:
+            print('c3a')
+            return self.fix_singlequote_keep(original)
+        elif '"' in original:
+            print('c3b')
+            return self.fix_doublequote_keep(original)
+        elif '<' in original:
+            print('c3d')
+            return self.fix_html_keep(original)
+        elif '%{' in original:
+            print('c4')
+            return self.fix_variable_keep(original)
+        elif '#{' in original:
+            print('c4b')
+            return self.fix_hashruby_keep(original)
+        else:
+            print('c5')
+            return self._get_translation_from_google(original)
 
     @staticmethod
     def starts_with_key(original):
@@ -195,7 +227,8 @@ class GoogletTranslate(object):
         print(10)
         original_no_spaces = original.lstrip()
         original_no_spaces_all = original_no_spaces.rstrip()
-        if original_no_spaces_all in (None, '', '<br/>', '</i>', '<strong>', '</strong>', '<i>', '<br>', '</br>'):
+        if original_no_spaces_all in (None, "'", '"', '', '<br/>', '</i>', '<strong>', '</strong>', '<i>', '<br>',
+                                      '</br>', '</ br>', '<br >', '<br />'):
             # skip empty br's
             return True
         print(11)
@@ -271,6 +304,118 @@ class GoogletTranslate(object):
             sentence_data = sentence_data + ' %{' + splitted_trans
         else:
             sentence_data = splitted_trans
+        return sentence_data
+
+    def fix_hashruby_keep(self, sentence):
+        sentence_data = ""
+        split_percent = sentence.split('#{')
+        splitted_trans = ""
+        count_split = 0
+        for splitted in split_percent:
+            if splitted in (None, ''):
+                # case 1 "#{time_ago} Dernière connexion sur le compte : il y a #{#{time_ago}#{time_ago}.".split('#{')
+                # ['', 'time_ago} Dernière connexion sur le compte : il y a ', '', 'time_ago}', 'time_ago}.']
+                # splitted = split_percent[0]  -- '' = splitted_trans = '#{'
+                # splitted = split_percent[1]  -- 'time_ago} Dernière connexion sur le compte : il y a '
+                # splitted = split_percent[2]  -- ''
+                # splitted = split_percent[3]  -- 'time_ago}'
+                # splitted = split_percent[4]  -- 'time_ago}'
+                # -
+                # case 2 "#{details_link}"
+                # ['', 'details_link}']
+                splitted_trans = splitted_trans + ' #{'
+            else:
+                if '}' in splitted:
+                    # 'time_ago} Dernière connexion sur le compte : il y a '
+                    cut_other_part = splitted.split('}')
+                    # ['time_ago', ' Dernière connexion sur le compte : il y a ']
+                    second_part_split = cut_other_part[1]
+                    #              ' Dernière connexion sur le compte : il y a '
+                    if second_part_split in (None, ''):
+                        splited_data = ''
+                    else:
+                        splited_data = self._get_translation_from_google(second_part_split)
+                    if count_split == 0:
+                        splitted_trans = splitted_trans + cut_other_part[0] + '} ' + splited_data
+                    else:
+                        splitted_trans = splitted_trans + ' #{' + cut_other_part[0] + '} ' + splited_data
+                else:
+                    splited_data = self._get_translation_from_google(splitted)
+                    splitted_trans = splitted_trans + splited_data
+                count_split = count_split + 1
+        if count_split == 0:
+            sentence_data = sentence_data + ' #{' + splitted_trans
+        else:
+            sentence_data = splitted_trans
+        return sentence_data
+
+    def fix_singlequote_keep(self, sentence):
+        sentence_data = ""
+        split_percent = sentence.split("'")
+        splitted_trans = ""
+        count_split = 0
+        for splitted in split_percent:
+            if splitted in (None, ''):
+                splitted_trans = splitted_trans + "'"
+            else:
+                splited_data = self.original_work_distribute(splitted)
+                splitted_trans = splitted_trans + splited_data
+                count_split = count_split + 1
+        if count_split == 0:
+            sentence_data = sentence_data + "'" + splitted_trans
+        else:
+            sentence_data = splitted_trans
+        return sentence_data
+
+    def fix_doublequote_keep(self, sentence):
+        sentence_data = ""
+        split_percent = sentence.split('"')
+        splitted_trans = ""
+        count_split = 0
+        for splitted in split_percent:
+            if splitted in (None, ''):
+                splitted_trans = splitted_trans + '"'
+            else:
+                splited_data = self.original_work_distribute(splitted)
+                splitted_trans = splitted_trans + splited_data
+                count_split = count_split + 1
+        if count_split == 0:
+            sentence_data = sentence_data + '"' + splitted_trans
+        else:
+            sentence_data = splitted_trans
+        return sentence_data
+
+    def fix_enters_keep(self, sentence, tipo="\n"):
+        print("fix_" + tipo + "_enters_keep", sentence)
+        sentence_data = ""
+        split_percent = sentence.split(tipo)
+        pprint(split_percent)
+        splitted_trans = ""
+        count_split = 0
+        for splitted in split_percent:
+            count_split = count_split + 1
+            print("simple splited_data", splitted)
+            if splitted in (None, ''):
+                print("adding enter")
+                splitted_trans = splitted_trans + tipo
+            else:
+                print("work distribute", splitted)
+                splited_data = self.original_work_distribute(splitted)
+                print("work translated", splited_data)
+
+                print("count_split", count_split)
+                if count_split < len(split_percent):
+                    splited_data = splited_data + tipo
+                    print("adding enter")
+                    print("work translated", splited_data)
+                splitted_trans = splitted_trans + splited_data
+
+        print("split_percent", split_percent)
+        if count_split == 0:
+            sentence_data = sentence_data + tipo + splitted_trans
+        else:
+            sentence_data = splitted_trans
+        print("sentence_data", sentence_data)
         return sentence_data
 
     def fix_html_keep(self, sentence):
@@ -448,16 +593,15 @@ class GoogletTranslate(object):
                 sz = s.search(html_string)
         # this is a key     in yml --> last_connection_html:
         # this is not a key in yml --> Dernière connexion sur le compte :
-        if ':' in original and ':' in html_string and len(original_key_is) >= 2 and len(
-                key_has_spaces) == 1:  # fix keep keys names
+        if ':' in original and ':' in html_string and len(original_key_is) >= 2 and len(key_has_spaces) == 1:  # fix keep keys names
             print('yml key protection:' + original + ')')
             first_source_colon = original.find(':')
             keep_source_definition = original[:first_source_colon]
             # print('length(' + str(12) + ') def(' + keep_source_definition + ')')
             first_translated_colon = html_string.find(':')
-            keep_translated_text = html_string[first_translated_colon:]
+            keep_translated_text = html_string[(first_translated_colon + 1):]
             # print('length(' + str(32) + ') trans(' + keep_translated_text + ')')
-            html_string = keep_source_definition + keep_translated_text
+            html_string = keep_source_definition + ': ' + keep_translated_text.lstrip()
             # new_largo = len(html_string)
         print('original(' + original + ')')
         # print('source_language(' + source_language + ')')
@@ -498,7 +642,8 @@ class GoogletTranslate(object):
 
         return html_string
 
-    if __name__ == "__main__":
-        import doctest
 
-        doctest.testmod()
+if __name__ == "__main__":
+    import doctest
+
+    doctest.testmod()
